@@ -1,0 +1,34 @@
+version: '3.8'
+
+volumes:
+  postgre-vol:
+
+networks:
+  various-photos-net:
+    driver: bridge
+
+services:
+  web:
+    image: variousphotos
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    networks:
+      - various-photos-net
+    depends_on:
+      - postgre
+
+  postgre:
+    image: postgres
+    ports:
+      - 5432:5432
+    networks:
+      - various-photos-net
+    volumes:
+      - postgre-vol:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: pg8201
+      POSTGRES_USER: variousphotos
+      POSTGRES_DB: variousphotos
